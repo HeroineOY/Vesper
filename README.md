@@ -2,6 +2,93 @@
   <img src="assets/banner.png" alt="Hermes Agent" width="100%">
 </p>
 
+# Vesper
+
+Vesper 是基于 [Nous Research / Hermes Agent](https://github.com/NousResearch/hermes-agent) 的暗色科幻桌面 Agent。它把 Hermes Python Agent 核心连接到 Electron 桌面应用、终端界面和消息网关；桌面端使用 React 构建原生聊天界面，并支持流式回答、模型切换、工具调用、会话管理、文件预览和语音交互。
+
+本仓库当前重点验证 Windows 桌面端的完整链路：React Renderer 负责界面，Preload 提供受控的原生能力，Electron 主进程管理窗口和后端进程，`hermes serve` 启动无头 JSON-RPC/WebSocket 服务，最终由 Python `AIAgent` 调用配置的模型与工具。
+
+## 桌面端运行预览
+
+下面的图片均来自本仓库在 Windows 11 上真实构建并启动后的 Vesper 桌面窗口，对话问题为“你是什么模型”。
+
+### Vesper / Void Glass
+
+<p align="center">
+  <img src="assets/vesper-void-glass.png" alt="Vesper Void Glass 桌面界面" width="100%">
+</p>
+
+Vesper 默认使用 Void Glass：深空黑玻璃表面、冷青交互信号与玫红告警色。界面保留 Hermes Agent 的会话、工具、终端、模型切换和状态栏能力，但产品品牌、安装包与应用图标均使用 Vesper。
+
+### 模型链路验证记录（主题迁移前）
+
+<p align="center">
+  <img src="assets/hermes-desktop-model-switch.png" alt="Vesper 中 GPT-5.6-terra 与 DeepSeek Chat 的真实回答" width="100%">
+</p>
+
+这张图保留了两次实际运行结果：较早的运行状态连接到自定义 provider 中的 `GPT-5.6-terra`，随后当前配置解析为 `DeepSeek Chat`。Vesper 不把模型名称写死在桌面端，实际模型取决于本机 profile、provider 和模型配置。这两张截图来自 Void Glass 主题迁移前，作为模型链路验证记录保留。
+
+### 当前 DeepSeek Chat 会话
+
+<p align="center">
+  <img src="assets/hermes-desktop-deepseek.png" alt="Vesper 回答你是什么模型" width="100%">
+</p>
+
+该图来自新建的干净会话。界面实际发送“你是什么模型”，后端完成推理后返回 DeepSeek Chat 的模型身份、提供方和 Hermes Agent 运行信息。
+
+## 桌面端架构
+
+```text
+React Renderer (@assistant-ui/react + nanostores)
+   |-- WebSocket / JSON-RPC (@hermes/shared) -----------------+
+   |-- window.hermesDesktop (Preload / contextBridge)         |
+   |                         | IPC                             |
+   v                         v                                 v
+Desktop UI              Electron Main                  hermes serve
+                        | window/process                    |
+                        | lifecycle                         v
+                        +--------------------------> tui_gateway
+                                                             |
+                                                             v
+                                               AIAgent + model_tools
+                                                             |
+                                                             v
+                                                 Model provider + tools
+```
+
+桌面聊天不是 TUI 的嵌入或改写。Electron 主进程启动独立的无头 Python 后端，React Renderer 通过 `@hermes/shared` 的 JSON-RPC 客户端与后端通信；Preload 则负责暴露经过限制的桌面原生能力。
+
+## 桌面端开发运行
+
+要求 Node.js `20.19+` 或 `22.12+`，Python `3.11+`。依赖必须按根 `package-lock.json` 和 npm workspace 规则安装：
+
+```powershell
+# 仓库根目录
+npm ci
+
+# 推荐入口：复用当前源码、.venv 与项目内 workspace
+.\run.ps1 desktop --source --skip-build
+
+# 需要热更新时再启动开发模式
+cd apps\desktop
+npm run dev
+```
+
+构建桌面产物：
+
+```powershell
+cd apps\desktop
+npm run build       # 生成 dist/
+npm run pack        # 生成 release/ 下的未打包应用
+npm run dist:win    # 生成 Windows 安装包
+```
+
+> 不要在 `apps/desktop` 内单独执行 `npm install`；桌面端依赖由仓库根 workspace 统一管理。API 密钥和本地配置不应提交到 Git。
+
+---
+
+## 上游 Hermes Agent
+
 # Hermes Agent ☤
 <p align="center">
   <a href="https://hermes-agent.nousresearch.com/">Hermes Agent</a> | <a href="https://hermes-agent.nousresearch.com/">Hermes Desktop</a>

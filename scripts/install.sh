@@ -2867,7 +2867,11 @@ install_desktop() {
 
     local app=""
     if [ "$OS" = "linux" ]; then
-        if [ -x "$desktop_dir/release/linux-unpacked/Hermes" ]; then
+        if [ -x "$desktop_dir/release/linux-unpacked/Vesper" ]; then
+            app="$desktop_dir/release/linux-unpacked/Vesper"
+        elif [ -x "$desktop_dir/release/linux-unpacked/vesper" ]; then
+            app="$desktop_dir/release/linux-unpacked/vesper"
+        elif [ -x "$desktop_dir/release/linux-unpacked/Hermes" ]; then
             app="$desktop_dir/release/linux-unpacked/Hermes"
         elif [ -x "$desktop_dir/release/linux-unpacked/hermes" ]; then
             app="$desktop_dir/release/linux-unpacked/hermes"
@@ -2875,6 +2879,8 @@ install_desktop() {
     else
         local cand
         for cand in \
+            "$desktop_dir/release/mac-arm64/Vesper.app" \
+            "$desktop_dir/release/mac/Vesper.app" \
             "$desktop_dir/release/mac-arm64/Hermes.app" \
             "$desktop_dir/release/mac/Hermes.app"; do
             if [ -d "$cand" ]; then

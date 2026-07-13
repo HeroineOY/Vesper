@@ -715,12 +715,12 @@ app.setName(APP_NAME)
 // Windows toast notifications silently no-op unless an AppUserModelID is set:
 // `new Notification().show()` returns without error and nothing appears. The
 // AUMID must match the installed Start Menu shortcut's AUMID, which
-// electron-builder derives from the build `appId` (com.nousresearch.hermes) —
+// Keep the development shell aligned with electron-builder's Vesper appId.
 // keep this string in sync with package.json `build.appId`. macOS/Linux don't
 // need this, so gate it on Windows. (Fixes: desktop approval/turn notifications
 // never firing on Windows.)
 if (IS_WINDOWS) {
-  app.setAppUserModelId('com.nousresearch.hermes')
+  app.setAppUserModelId('io.github.heroineoy.vesper')
 }
 
 // Seed the native About panel with the live Hermes version. This is refreshed
@@ -2541,7 +2541,7 @@ async function applyUpdates(opts = {}) {
     emitUpdateProgress({
       stage: 'restart',
       message:
-        'Updating Hermes — this window will close and the updater will open. Don’t reopen Hermes yourself; it restarts automatically when the update finishes.',
+        'Updating Vesper — this window will close and the updater will open. Don’t reopen Vesper yourself; it restarts automatically when the update finishes.',
       percent: 100
     })
     repairMacUpdaterHelper(updater)
@@ -2858,7 +2858,7 @@ async function applyUpdatesPosixInApp(opts: any) {
   if (rebuilt.code !== 0) {
     emitUpdateProgress({
       stage: 'error',
-      message: 'Backend updated, but the desktop rebuild failed. Restart Hermes to retry.',
+      message: 'Backend updated, but the desktop rebuild failed. Restart Vesper to retry.',
       error: rebuilt.error || 'rebuild-failed'
     })
 
@@ -2943,7 +2943,7 @@ async function applyUpdatesPosixInApp(opts: any) {
           backendUpdated: true,
           guiUpdated: false,
           manualRestart: true,
-          message: 'Backend updated. Quit and reopen Hermes to load the new version.'
+          message: 'Backend updated. Quit and reopen Vesper to load the new version.'
         }
       }
     }
@@ -2979,11 +2979,13 @@ async function applyUpdatesPosixInApp(opts: any) {
       sandboxBlocked: true,
       message:
         'Backend updated. The rebuilt app can’t relaunch automatically ' +
-        '(sandbox helper needs root). Quit and reopen Hermes to finish.'
+        '(sandbox helper needs root). Quit and reopen Vesper to finish.'
     }
   }
 
   const rebuiltApp = [
+    path.join(updateRoot, 'apps', 'desktop', 'release', 'mac-arm64', 'Vesper.app'),
+    path.join(updateRoot, 'apps', 'desktop', 'release', 'mac', 'Vesper.app'),
     path.join(updateRoot, 'apps', 'desktop', 'release', 'mac-arm64', 'Hermes.app'),
     path.join(updateRoot, 'apps', 'desktop', 'release', 'mac', 'Hermes.app')
   ].find(directoryExists)
@@ -2995,7 +2997,7 @@ async function applyUpdatesPosixInApp(opts: any) {
   if (!rebuiltApp || !targetApp) {
     emitUpdateProgress({
       stage: 'done',
-      message: 'Backend updated. Restart Hermes to load the new version.',
+      message: 'Backend updated. Restart Vesper to load the new version.',
       percent: 100
     })
 
@@ -3034,7 +3036,7 @@ fi
   } catch (err) {
     emitUpdateProgress({
       stage: 'done',
-      message: 'Backend + app updated. Restart Hermes to load the new version.',
+      message: 'Backend + app updated. Restart Vesper to load the new version.',
       percent: 100
     })
     rememberLog(`[updates] could not write swap script: ${err.message}; rebuilt app at ${rebuiltApp}`)

@@ -97,6 +97,71 @@ export const nousTheme: DesktopTheme = {
   }
 }
 
+/** Vesper — dark glass surfaces with cold cyan and spectral rose signals. */
+export const vesperTheme: DesktopTheme = {
+  name: 'vesper',
+  label: 'Vesper',
+  description: 'Void glass with cyan and spectral rose signals',
+  colors: {
+    background: '#080A10',
+    foreground: '#C8D2DF',
+    card: '#111620',
+    cardForeground: '#F2F6FB',
+    muted: '#171D28',
+    mutedForeground: '#7D899B',
+    popover: '#151B25',
+    popoverForeground: '#F2F6FB',
+    primary: '#74E8FF',
+    primaryForeground: '#061015',
+    secondary: '#1B2633',
+    secondaryForeground: '#C5D0DE',
+    accent: '#182634',
+    accentForeground: '#DCEAF4',
+    border: '#263441',
+    input: '#324453',
+    ring: '#74E8FF',
+    midground: '#74E8FF',
+    composerRing: '#74E8FF',
+    destructive: '#FF6FA9',
+    destructiveForeground: '#18050D',
+    sidebarBackground: '#090D14',
+    sidebarBorder: '#1E2A35',
+    userBubble: '#182536',
+    userBubbleBorder: '#315166'
+  },
+  darkColors: {
+    background: '#080A10',
+    foreground: '#C8D2DF',
+    card: '#111620',
+    cardForeground: '#F2F6FB',
+    muted: '#171D28',
+    mutedForeground: '#7D899B',
+    popover: '#151B25',
+    popoverForeground: '#F2F6FB',
+    primary: '#74E8FF',
+    primaryForeground: '#061015',
+    secondary: '#1B2633',
+    secondaryForeground: '#C5D0DE',
+    accent: '#182634',
+    accentForeground: '#DCEAF4',
+    border: '#263441',
+    input: '#324453',
+    ring: '#74E8FF',
+    midground: '#74E8FF',
+    composerRing: '#74E8FF',
+    destructive: '#FF6FA9',
+    destructiveForeground: '#18050D',
+    sidebarBackground: '#090D14',
+    sidebarBorder: '#1E2A35',
+    userBubble: '#182536',
+    userBubbleBorder: '#315166'
+  },
+  typography: {
+    fontSans: SYSTEM_SANS,
+    fontMono: `"JetBrains Mono", ${SYSTEM_MONO}`
+  }
+}
+
 /** Deep blue-violet with cool accents. Matches the dashboard midnight theme. */
 export const midnightTheme: DesktopTheme = {
   name: 'midnight',
@@ -278,6 +343,7 @@ export const slateTheme: DesktopTheme = {
 }
 
 export const BUILTIN_THEMES: Record<string, DesktopTheme> = {
+  vesper: vesperTheme,
   nous: nousTheme,
   midnight: midnightTheme,
   ember: emberTheme,
@@ -289,4 +355,4 @@ export const BUILTIN_THEMES: Record<string, DesktopTheme> = {
 export const BUILTIN_THEME_LIST = Object.values(BUILTIN_THEMES)
 
 /** Skin used when nothing is persisted or the persisted name is retired. */
-export const DEFAULT_SKIN_NAME = 'nous'
+export const DEFAULT_SKIN_NAME = 'vesper'

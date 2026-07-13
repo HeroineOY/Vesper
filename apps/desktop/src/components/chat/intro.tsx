@@ -1,4 +1,4 @@
-import { type CSSProperties, useState } from 'react'
+import { useState } from 'react'
 
 import { capitalize, normalize } from '@/lib/text'
 
@@ -30,7 +30,7 @@ const FALLBACK_COPY: IntroCopy[] = [
     body: "Bring the code, question, or stuck part. I'll read the room before making changes."
   },
   {
-    headline: 'What should Hermes look at?',
+    headline: 'What should Vesper look at?',
     body: "Send the task, failing path, or half-formed plan. I'll help turn it into action."
   },
   {
@@ -122,7 +122,7 @@ function fallbackCopyForPersonality(personalityKey: string): IntroCopy[] {
       body: "Send the task, file, or rough idea. I'll use your configured voice and keep the work grounded in this repo."
     },
     {
-      headline: `What does ${label} Hermes need to see?`,
+      headline: `What does ${label} Vesper need to see?`,
       body: "Bring the context or the stuck part. I'll adapt to your configured personality."
     },
     {
@@ -130,7 +130,7 @@ function fallbackCopyForPersonality(personalityKey: string): IntroCopy[] {
       body: "Send the problem, file, or idea. I'll follow the personality you've configured."
     },
     {
-      headline: `What should ${label} Hermes tackle?`,
+      headline: `What should ${label} Vesper tackle?`,
       body: "Drop the task here. I'll keep the work grounded in the repo."
     },
     {
@@ -144,7 +144,7 @@ function pickCopy(copies: IntroCopy[], seed = 0): IntroCopy {
   return copies[Math.abs(seed) % copies.length] || FALLBACK_COPY[0]
 }
 
-const WORDMARK = 'HERMES AGENT'
+const WORDMARK = 'VESPER'
 
 function resolveCopy(personality?: string, seed?: number): IntroCopy {
   const personalityKey = normalizeKey(personality)
@@ -168,13 +168,9 @@ export function Intro({ personality, seed }: IntroProps) {
       <div className="w-full min-w-0">
         <p
           aria-label={WORDMARK}
-          className="fit-text mx-auto mb-1 w-[calc(100%-1rem)] font-['Collapse'] font-bold uppercase leading-[0.9] tracking-[0.08em] text-midground mix-blend-plus-lighter dark:text-foreground/90"
-          style={{ '--fit-min': '2.75rem' } as CSSProperties}
+          className="mx-auto mb-3 max-w-full font-['Collapse'] text-6xl font-bold uppercase leading-none tracking-normal text-midground mix-blend-plus-lighter dark:text-foreground/90"
         >
-          <span>
-            <span>{WORDMARK}</span>
-          </span>
-          <span aria-hidden="true">{WORDMARK}</span>
+          {WORDMARK}
         </p>
 
         <p className="m-0 text-center leading-normal tracking-tight">{copy.body}</p>

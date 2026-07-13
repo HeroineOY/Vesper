@@ -70,6 +70,14 @@ apps/desktop/build/
 apps/desktop/dist/
 apps/desktop/release/
 apps/desktop/*.tsbuildinfo
+# TypeScript project references may emit beside sources during local builds.
+apps/desktop/src/**/*.js
+apps/desktop/electron/**/*.js
+apps/shared/src/**/*.js
+
+# Local browser QA and generated design artifacts.
+.playwright-cli/
+/output/
 
 # Web UI assets — synced from @nous-research/ui at build time via
 # `npm run sync-assets` (see web/package.json).
@@ -137,6 +145,8 @@ docs/superpowers/*
 /workspace/checkpoints/
 # 运行时缓存 / 网关 / 看板状态（可重建）
 /workspace/models_dev_cache.json
+/workspace/ollama_cloud_models_cache.json
+/workspace/provider_models_cache.json
 /workspace/channel_directory.json
 /workspace/kanban.db
 /workspace/gateway.lock

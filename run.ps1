@@ -14,6 +14,7 @@
     .\run.ps1                 # 启动交互式终端
     .\run.ps1 gateway start   # 启动消息网关
     .\run.ps1 doctor          # 自检
+    .\run.ps1 desktop         # 启动桌面端并复用当前源码与 workspace
 #>
 
 $ErrorActionPreference = 'Stop'
@@ -57,5 +58,13 @@ if (-not $py) {
 
 # --- 4. 启动 Hermes（入口与已安装的 `hermes` 命令等价，支持全部子命令）---
 Write-Host "[hermes] HERMES_HOME = $env:HERMES_HOME" -ForegroundColor DarkGray
-& $py (Join-Path $Root 'hermes') @args
+$launchArgs = @($args)
+if ($launchArgs.Count -gt 0 -and $launchArgs[0] -in @('desktop', 'gui')) {
+    Remove-Item Env:ELECTRON_RUN_AS_NODE -ErrorAction SilentlyContinue
+    if (-not ($launchArgs -contains '--hermes-root')) {
+        $launchArgs += @('--hermes-root', $Root)
+    }
+}
+
+& $py (Join-Path $Root 'hermes') @launchArgs
 exit $LASTEXITCODE

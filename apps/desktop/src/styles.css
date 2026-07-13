@@ -437,6 +437,32 @@
     --ui-selection-background: color-mix(in srgb, #ffd24a 38%, transparent);
   }
 
+  :root[data-hermes-theme='vesper'] {
+    --ui-warm: #ff6fa9;
+    --ui-red: #ff6fa9;
+    --ui-orange: #ff9c7a;
+    --ui-yellow: #e7c36f;
+    --ui-green: #7cf0bd;
+    --ui-cyan: #74e8ff;
+    --ui-blue: #68a8ff;
+    --ui-purple: #b49aff;
+    --ui-bg-chrome: color-mix(in srgb, var(--theme-background-seed) 88%, #111620);
+    --ui-bg-sidebar: color-mix(in srgb, var(--theme-sidebar-seed) 94%, #05070b);
+    --ui-bg-editor: color-mix(in srgb, var(--theme-card-seed) 76%, transparent);
+    --ui-bg-elevated: color-mix(in srgb, var(--theme-elevated-seed) 88%, transparent);
+    --ui-chat-surface-background: color-mix(in srgb, var(--ui-bg-chrome) 94%, transparent);
+    --ui-sidebar-surface-background: color-mix(in srgb, var(--ui-bg-sidebar) 96%, transparent);
+    --ui-editor-surface-background: color-mix(in srgb, var(--ui-bg-chrome) 92%, transparent);
+    --ui-selection-background: color-mix(in srgb, #ff6fa9 28%, transparent);
+    --dt-input-bg: 24%;
+    --dt-input-border: 10%;
+    --radius: 0.625rem;
+    --radius-scalar: 0.52;
+    --shadow-composer:
+      0 0 0 0.0625rem color-mix(in srgb, #74e8ff 8%, transparent),
+      0 1rem 2.75rem color-mix(in srgb, #000 42%, transparent);
+  }
+
   * {
     box-sizing: border-box;
     border-color: var(--dt-border);

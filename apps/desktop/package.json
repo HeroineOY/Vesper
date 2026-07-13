@@ -1,9 +1,9 @@
 {
   "name": "hermes",
-  "productName": "Hermes",
+  "productName": "Vesper",
   "private": true,
   "version": "0.17.0",
-  "description": "Native desktop shell for Hermes Agent.",
+  "description": "Vesper desktop agent powered by Hermes Agent.",
   "author": "Nous Research",
   "type": "module",
   "main": "dist/electron-main.mjs",
@@ -151,19 +151,19 @@
   },
   "build": {
     "electronVersion": "40.10.2",
-    "appId": "com.nousresearch.hermes",
-    "productName": "Hermes",
-    "executableName": "Hermes",
+    "appId": "io.github.heroineoy.vesper",
+    "productName": "Vesper",
+    "executableName": "Vesper",
     "protocols": [
       {
-        "name": "Hermes Protocol",
+        "name": "Vesper Protocol",
         "schemes": [
           "hermes"
         ]
       }
     ],
-    "artifactName": "Hermes-${version}-${os}-${arch}.${ext}",
-    "icon": "assets/icon",
+    "artifactName": "Vesper-${version}-${os}-${arch}.${ext}",
+    "icon": "assets/icon.png",
     "directories": {
       "output": "release"
     },
@@ -194,15 +194,16 @@
       "dist/**"
     ],
     "mac": {
+      "icon": "assets/icon.png",
       "category": "public.app-category.developer-tools",
       "entitlements": "electron/entitlements.mac.plist",
       "entitlementsInherit": "electron/entitlements.mac.inherit.plist",
       "extendInfo": {
-        "CFBundleDisplayName": "Hermes",
-        "CFBundleExecutable": "Hermes",
-        "CFBundleName": "Hermes",
-        "NSAudioCaptureUsageDescription": "Hermes uses audio capture for voice conversations.",
-        "NSMicrophoneUsageDescription": "Hermes uses the microphone for voice input and voice conversations."
+        "CFBundleDisplayName": "Vesper",
+        "CFBundleExecutable": "Vesper",
+        "CFBundleName": "Vesper",
+        "NSAudioCaptureUsageDescription": "Vesper uses audio capture for voice conversations.",
+        "NSMicrophoneUsageDescription": "Vesper uses the microphone for voice input and voice conversations."
       },
       "gatekeeperAssess": false,
       "hardenedRuntime": true,
@@ -212,7 +213,7 @@
       ]
     },
     "dmg": {
-      "title": "Install Hermes",
+      "title": "Install Vesper",
       "backgroundColor": "#f5f5f7",
       "iconSize": 96,
       "window": {
@@ -234,7 +235,8 @@
       ]
     },
     "win": {
-      "legalTrademarks": "Hermes",
+      "icon": "assets/icon.ico",
+      "legalTrademarks": "Vesper",
       "target": [
         "nsis",
         "msi"
@@ -244,7 +246,7 @@
     "linux": {
       "category": "Development",
       "maintainer": "Nous Research <support@nousresearch.com>",
-      "synopsis": "Native desktop shell for Hermes Agent.",
+      "synopsis": "Vesper desktop agent powered by Hermes Agent.",
       "target": [
         "AppImage",
         "deb",
@@ -255,8 +257,8 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "perMachine": false,
-      "shortcutName": "Hermes",
-      "uninstallDisplayName": "Hermes",
+      "shortcutName": "Vesper",
+      "uninstallDisplayName": "Vesper",
       "warningsAsErrors": false
     }
   }

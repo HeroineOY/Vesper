@@ -17,22 +17,29 @@ import { persistString, persistStringRecord, storedString, storedStringRecord } 
 import { $activeGatewayProfile, normalizeProfileKey } from '@/store/profile'
 
 import { hexToRgb, mix, readableOn } from './color'
-import { BUILTIN_THEME_LIST, BUILTIN_THEMES, DEFAULT_SKIN_NAME, DEFAULT_TYPOGRAPHY, nousTheme } from './presets'
+import {
+  BUILTIN_THEME_LIST,
+  BUILTIN_THEMES,
+  DEFAULT_SKIN_NAME,
+  DEFAULT_TYPOGRAPHY,
+  nousTheme,
+  vesperTheme
+} from './presets'
 import type { DesktopTheme, DesktopThemeColors } from './types'
 import { $userThemes, resolveTheme } from './user-themes'
 
 // Legacy global skin (pre per-profile themes). Still the inheritance fallback
 // for any profile without its own assignment, so single-profile users and old
 // installs are unaffected.
-const SKIN_KEY = 'hermes-desktop-theme-v2'
-const MODE_KEY = 'hermes-desktop-mode-v1'
+const SKIN_KEY = 'vesper-desktop-theme-v1'
+const MODE_KEY = 'vesper-desktop-mode-v1'
 // Per-profile skin + light/dark mode assignments: { [profileKey]: value }. A
 // profile inherits the global default until it's given its own appearance.
-const PROFILE_SKINS_KEY = 'hermes-desktop-profile-themes-v1'
-const PROFILE_MODES_KEY = 'hermes-desktop-profile-modes-v1'
+const PROFILE_SKINS_KEY = 'vesper-desktop-profile-themes-v1'
+const PROFILE_MODES_KEY = 'vesper-desktop-profile-modes-v1'
 // Last active profile, recorded so the boot-time paint can pick that profile's
 // theme before the gateway reports which profile actually launched.
-const LAST_PROFILE_KEY = 'hermes-desktop-active-profile-v1'
+const LAST_PROFILE_KEY = 'vesper-desktop-active-profile-v1'
 const RETIRED_SKINS = new Set(['nous-light', 'default', 'gold'])
 
 export type ThemeMode = 'light' | 'dark' | 'system'
@@ -114,7 +121,7 @@ function synthLightColors(seed: DesktopTheme): DesktopThemeColors {
 
 /** Returns the seed palette for a given skin + mode (no overrides applied). */
 export function getBaseColors(skinName: string, mode: 'light' | 'dark'): DesktopThemeColors {
-  const seed = resolveTheme(skinName) ?? nousTheme
+  const seed = resolveTheme(skinName) ?? vesperTheme
 
   if (mode === 'dark') {
     return seed.darkColors ?? seed.colors
@@ -124,7 +131,7 @@ export function getBaseColors(skinName: string, mode: 'light' | 'dark'): Desktop
 }
 
 function deriveTheme(skinName: string, mode: 'light' | 'dark'): DesktopTheme {
-  const seed = resolveTheme(skinName) ?? nousTheme
+  const seed = resolveTheme(skinName) ?? vesperTheme
 
   return {
     ...seed,
@@ -298,7 +305,7 @@ interface ThemeContextValue {
 const SKIN_LIST = BUILTIN_THEME_LIST.map(({ name, label, description }) => ({ name, label, description }))
 
 const ThemeContext = createContext<ThemeContextValue>({
-  theme: nousTheme,
+  theme: vesperTheme,
   themeName: DEFAULT_SKIN_NAME,
   mode: 'light',
   resolvedMode: 'light',

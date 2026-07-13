@@ -113,12 +113,14 @@ def packaged_gui_app_paths() -> "list[Path]":
 
     Returns every candidate for the current OS; the caller filters to those
     that actually exist. We never glob system-wide — only the well-known
-    electron-builder output locations for the "Hermes" product.
+    electron-builder output locations for Vesper and legacy Hermes builds.
     """
     home = Path.home()
     paths: list[Path] = []
     if sys.platform == "darwin":
         paths += [
+            Path("/Applications/Vesper.app"),
+            home / "Applications" / "Vesper.app",
             Path("/Applications/Hermes.app"),
             home / "Applications" / "Hermes.app",
         ]
@@ -126,6 +128,7 @@ def packaged_gui_app_paths() -> "list[Path]":
         local = os.environ.get("LOCALAPPDATA")
         local_base = Path(local) if local else (home / "AppData" / "Local")
         paths += [
+            local_base / "Programs" / "Vesper",
             # NSIS per-user install (perMachine=false → Programs\Hermes).
             local_base / "Programs" / "Hermes",
             # Older / alternate layout some builds used.
@@ -134,6 +137,7 @@ def packaged_gui_app_paths() -> "list[Path]":
         program_files = os.environ.get("ProgramFiles")
         if program_files:
             # NSIS per-machine fallback (needs admin to remove).
+            paths.append(Path(program_files) / "Vesper")
             paths.append(Path(program_files) / "Hermes")
     else:
         # Linux: AppImage is a single file the user placed somewhere; we can
@@ -145,6 +149,8 @@ def packaged_gui_app_paths() -> "list[Path]":
         data = os.environ.get("XDG_DATA_HOME")
         data_base = Path(data) if data else (home / ".local" / "share")
         paths += [
+            data_base / "applications" / "vesper.desktop",
+            data_base / "applications" / "Vesper.desktop",
             data_base / "applications" / "hermes.desktop",
             data_base / "applications" / "Hermes.desktop",
         ]

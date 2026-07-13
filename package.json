@@ -1,7 +1,7 @@
 {
-  "name": "hermes-agent",
+  "name": "vesper",
   "version": "1.0.0",
-  "description": "An AI agent with advanced tool-calling capabilities, featuring a flexible toolsets system for organizing and managing tools.",
+  "description": "Vesper dark sci-fi desktop agent, powered by Hermes Agent.",
   "private": true,
   "workspaces": [
     "apps/*",
