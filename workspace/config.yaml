@@ -1,0 +1,26 @@
+# 默认模型：CCSwitch "My Codex" 远程端点（OpenAI Responses 兼容）
+# - key 从环境变量 OPENAI_API_KEY 读取，不写入此文件
+# - base_url 与 CCSwitch 的上游 API 地址保持一致
+model:
+  provider: custom:my-codex
+  default: gpt-5.6-terra
+
+agent:
+  reasoning_effort: high
+
+custom_providers:
+  - name: my-codex
+    base_url: https://jojocode.com/v1
+    key_env: OPENAI_API_KEY
+    api_mode: codex_responses
+    model: gpt-5.6-terra
+
+fallback_providers:
+  - provider: deepseek
+    model: deepseek-chat
+
+platforms:
+  api_server:
+    port: 8642
+    enabled: true
+mcp_servers: {}
