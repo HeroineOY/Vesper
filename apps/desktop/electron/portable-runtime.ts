@@ -65,6 +65,35 @@ export interface PortableSeedResult {
   soul: boolean
   userMemory: boolean
   memoryDirectory: string | null
+  memoryLinked: boolean
+}
+
+function ensurePortableMemoryLink(hermesHome: string, memoryDirectory: string): boolean {
+  const localMemoryDirectory = path.join(hermesHome, 'memories')
+
+  if (path.resolve(localMemoryDirectory) === path.resolve(memoryDirectory)) {
+    return false
+  }
+
+  fs.mkdirSync(memoryDirectory, { recursive: true })
+
+  if (fs.existsSync(localMemoryDirectory)) {
+    const stats = fs.lstatSync(localMemoryDirectory)
+
+    if (stats.isSymbolicLink()) {
+      return path.resolve(fs.realpathSync(localMemoryDirectory)) === path.resolve(fs.realpathSync(memoryDirectory))
+    }
+
+    if (!stats.isDirectory() || fs.readdirSync(localMemoryDirectory).length > 0) {
+      return false
+    }
+
+    fs.rmdirSync(localMemoryDirectory)
+  }
+
+  fs.symlinkSync(memoryDirectory, localMemoryDirectory, 'junction')
+
+  return true
 }
 
 export function seedPortableHermesHome({
@@ -78,7 +107,8 @@ export function seedPortableHermesHome({
     config: false,
     soul: false,
     userMemory: false,
-    memoryDirectory: null
+    memoryDirectory: null,
+    memoryLinked: false
   }
 
   const seedRoot = path.join(resourcesPath, 'portable-seed')
@@ -121,6 +151,7 @@ export function seedPortableHermesHome({
 
   try {
     result.userMemory = copyIfMissing(path.join(seedRoot, 'memories', 'USER.md'), path.join(memoryDirectory, 'USER.md'))
+    result.memoryLinked = ensurePortableMemoryLink(hermesHome, memoryDirectory)
   } catch {
     const fallbackMemoryDirectory = path.join(hermesHome, 'memories')
     result.memoryDirectory = fallbackMemoryDirectory
@@ -128,6 +159,7 @@ export function seedPortableHermesHome({
       path.join(seedRoot, 'memories', 'USER.md'),
       path.join(fallbackMemoryDirectory, 'USER.md')
     )
+    result.memoryLinked = false
   }
 
   return result

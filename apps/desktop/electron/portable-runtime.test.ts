@@ -52,14 +52,26 @@ test('portable seed upgrades only the stock persona and preserves existing memor
   fs.writeFileSync(path.join(home, 'SOUL.md'), DEFAULT_STOCK_SOUL, 'utf8')
 
   const first = seedPortableHermesHome({ resourcesPath: resources, hermesHome: home })
-  assert.deepEqual(first, { config: true, soul: true, userMemory: true, memoryDirectory: sharedMemory })
+  assert.deepEqual(first, {
+    config: true,
+    soul: true,
+    userMemory: true,
+    memoryDirectory: sharedMemory,
+    memoryLinked: true
+  })
   assert.equal(fs.readFileSync(path.join(home, 'SOUL.md'), 'utf8'), '# Furina\n')
   assert.equal(fs.readFileSync(path.join(sharedMemory, 'USER.md'), 'utf8'), 'seed memory\n')
 
   fs.writeFileSync(path.join(home, 'SOUL.md'), '# My custom persona\n', 'utf8')
   fs.writeFileSync(path.join(sharedMemory, 'USER.md'), 'live memory\n', 'utf8')
   const second = seedPortableHermesHome({ resourcesPath: resources, hermesHome: home })
-  assert.deepEqual(second, { config: false, soul: false, userMemory: false, memoryDirectory: sharedMemory })
+  assert.deepEqual(second, {
+    config: false,
+    soul: false,
+    userMemory: false,
+    memoryDirectory: sharedMemory,
+    memoryLinked: true
+  })
   assert.equal(fs.readFileSync(path.join(home, 'SOUL.md'), 'utf8'), '# My custom persona\n')
   assert.equal(fs.readFileSync(path.join(sharedMemory, 'USER.md'), 'utf8'), 'live memory\n')
 })
