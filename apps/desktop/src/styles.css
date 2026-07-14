@@ -576,9 +576,22 @@
   filter: drop-shadow(0 0 0.25rem color-mix(in srgb, #68ddff 45%, transparent));
 }
 
-.furina-charm-familiar {
-  animation: furina-charm-bob 1.65s ease-in-out infinite alternate;
-  transform-origin: 16px 19px;
+.furina-charm-stage {
+  animation: furina-charm-stage-rise 1.8s ease-in-out infinite alternate;
+  transform-origin: 16px 20px;
+}
+
+.furina-charm-curtain-left,
+.furina-charm-curtain-right {
+  transform-origin: 16px 9px;
+}
+
+.furina-charm-curtain-left {
+  animation: furina-charm-curtain-left 1.45s ease-in-out infinite alternate;
+}
+
+.furina-charm-curtain-right {
+  animation: furina-charm-curtain-right 1.45s ease-in-out infinite alternate;
 }
 
 .furina-charm-ripple {
@@ -602,9 +615,21 @@
   animation: furina-charm-sparkle 1.1s ease-in-out infinite alternate;
 }
 
-@keyframes furina-charm-bob {
+@keyframes furina-charm-stage-rise {
   to {
-    transform: translateY(-1.35px) rotate(-2deg);
+    transform: translateY(-0.85px);
+  }
+}
+
+@keyframes furina-charm-curtain-left {
+  to {
+    transform: skewY(-4deg) translateX(-0.55px);
+  }
+}
+
+@keyframes furina-charm-curtain-right {
+  to {
+    transform: skewY(4deg) translateX(0.55px);
   }
 }
 
@@ -634,7 +659,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .furina-charm-familiar,
+  .furina-charm-stage,
+  .furina-charm-curtain-left,
+  .furina-charm-curtain-right,
   .furina-charm-ripple,
   .furina-charm-waterlight,
   .furina-charm-sparkle {

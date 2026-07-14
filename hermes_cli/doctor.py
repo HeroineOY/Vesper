@@ -1196,9 +1196,12 @@ def run_doctor(args):
             fixed_count += 1
     
     # Check memory directory
-    memories_dir = hermes_home / "memories"
+    from hermes_memory import get_memory_dir
+
+    memories_dir = get_memory_dir()
+    memories_display = str(memories_dir)
     if memories_dir.exists():
-        check_ok(f"{_DHH}/memories/ directory exists")
+        check_ok(f"Memory directory exists: {memories_display}")
         memory_file = memories_dir / "MEMORY.md"
         user_file = memories_dir / "USER.md"
         if memory_file.exists():
@@ -1212,10 +1215,10 @@ def run_doctor(args):
         else:
             check_info("USER.md not created yet (will be created when the agent first writes a memory)")
     else:
-        check_warn(f"{_DHH}/memories/ not found", "(will be created on first use)")
+        check_warn(f"Memory directory not found: {memories_display}", "(will be created on first use)")
         if should_fix:
             memories_dir.mkdir(parents=True, exist_ok=True)
-            check_ok(f"Created {_DHH}/memories/")
+            check_ok(f"Created {memories_display}")
             fixed_count += 1
     
     # Check SQLite session store

@@ -11490,6 +11490,8 @@ class MemoryReset(BaseModel):
 
 @app.get("/api/memory")
 async def get_memory_status():
+    from hermes_memory import get_memory_dir
+
     cfg = load_config()
     active = ""
     mem = cfg.get("memory")
@@ -11497,7 +11499,7 @@ async def get_memory_status():
         active = _normalize_memory_provider_name(mem.get("provider"))
 
     # Built-in memory file sizes (so the UI can show what a reset would erase).
-    mem_dir = get_hermes_home() / "memories"
+    mem_dir = get_memory_dir()
     files = {}
     for fname, key in (("MEMORY.md", "memory"), ("USER.md", "user")):
         path = mem_dir / fname
@@ -11526,11 +11528,13 @@ async def set_memory_provider(body: MemoryProviderSelect):
 
 @app.post("/api/memory/reset")
 async def reset_memory(body: MemoryReset):
+    from hermes_memory import get_memory_dir
+
     target = (body.target or "all").strip().lower()
     if target not in {"all", "memory", "user"}:
         raise HTTPException(status_code=400, detail="target must be all, memory, or user")
 
-    mem_dir = get_hermes_home() / "memories"
+    mem_dir = get_memory_dir()
     deleted = []
     targets = []
     if target in {"all", "memory"}:

@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 
 interface FurinaThinkingCharmProps extends ComponentProps<'svg'> {}
 
-/** A tiny Hydro stage familiar: a top hat, a water drop, and a theatrical sparkle. */
+/** A tiny Fontaine opera stage: Hydro curtains, Furina's crown, and a water mirror. */
 export function FurinaThinkingCharm({ className, ...props }: FurinaThinkingCharmProps) {
   const gradientId = `furina-charm-water-${useId().replaceAll(':', '')}`
 
@@ -24,25 +24,35 @@ export function FurinaThinkingCharm({ className, ...props }: FurinaThinkingCharm
         </linearGradient>
       </defs>
 
-      <ellipse className="furina-charm-ripple" cx="15.5" cy="27" fill="none" rx="8" ry="1.8" stroke="#72e8ff" />
-      <circle className="furina-charm-waterlight" cx="16" cy="18" fill="none" r="9.1" />
-      <g className="furina-charm-familiar">
+      <ellipse className="furina-charm-ripple" cx="16" cy="26.5" fill="none" rx="9.2" ry="2.1" stroke="#72e8ff" />
+      <circle className="furina-charm-waterlight" cx="16" cy="17.2" fill="none" r="9.4" />
+      <g className="furina-charm-stage">
         <path
-          d="M16 9.5c-1.1 2.2-5.3 5.9-5.3 9.7a5.3 5.3 0 0 0 10.6 0c0-3.8-4.2-7.5-5.3-9.7Z"
+          className="furina-charm-curtain-left"
+          d="M7.2 8.8c2 1.5 3.2 4.5 3.1 10.8-.1 2.4.8 3.6 2.1 4.7-3.4-.8-5.3-3.1-5.2-6.8.1-4.6.1-6.6-.8-8.7.1 0 .4 0 .8 0Z"
           fill={`url(#${gradientId})`}
         />
-        <path d="M10.1 10.1h11.8l-1-1.9H11.1l-1 1.9Z" fill="#0c1525" stroke="#96edff" strokeWidth=".8" />
-        <path d="M12 8.2h8v2H12z" fill="#15233a" stroke="#b8f4ff" strokeWidth=".8" />
-        <path d="M12.1 9.25h7.8" stroke="#a870ff" strokeWidth=".9" />
         <path
-          d="M13.1 15.5c.5-1.5 1.3-2.5 2.8-3.6"
-          fill="none"
-          stroke="#a6f4ff"
-          strokeLinecap="round"
-          strokeWidth="1.3"
+          className="furina-charm-curtain-right"
+          d="M24.8 8.8c-2 1.5-3.2 4.5-3.1 10.8.1 2.4-.8 3.6-2.1 4.7 3.4-.8 5.3-3.1 5.2-6.8-.1-4.6-.1-6.6.8-8.7-.1 0-.4 0-.8 0Z"
+          fill={`url(#${gradientId})`}
         />
-        <circle cx="14" cy="20" fill="#16304d" r=".85" />
-        <circle cx="18" cy="20" fill="#16304d" r=".85" />
+        <path
+          d="M10.4 9.2c3.5-2.8 7.7-2.8 11.2 0"
+          fill="none"
+          stroke="#baf7ff"
+          strokeLinecap="round"
+          strokeWidth="1.1"
+        />
+        <path
+          d="m11.7 16.1 2.2-4.2 2.1 2.6 2.1-2.6 2.2 4.2-1.1 3.4h-6.4l-1.1-3.4Z"
+          fill="#102a48"
+          stroke="#85ecff"
+          strokeLinejoin="round"
+          strokeWidth=".9"
+        />
+        <path d="M13.2 17.3h5.6" stroke="#6ce5ff" strokeLinecap="round" strokeWidth="1.1" />
+        <path d="M14.2 20.8c1.1-.7 2.5-.7 3.6 0" fill="none" stroke="#9af4ff" strokeLinecap="round" strokeWidth="1" />
       </g>
       <path
         className="furina-charm-sparkle"

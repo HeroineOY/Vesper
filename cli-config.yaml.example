@@ -543,6 +543,10 @@ prompt_caching:
 # Disabled by default in batch_runner.
 #
 memory:
+  # Optional shared location for MEMORY.md and USER.md. Relative paths are
+  # resolved beneath HERMES_HOME; an absolute path can be shared by profiles.
+  # directory: "D:/AI/furina/memory"
+
   # Agent's personal notes: environment facts, conventions, things learned
   memory_enabled: true
   

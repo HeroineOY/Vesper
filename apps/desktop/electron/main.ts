@@ -94,6 +94,12 @@ import {
 import { createLinkTitleWindow, guardLinkTitleSession, readLinkTitleWindowTitle } from './link-title-window'
 import { serializeJsonBody, setJsonRequestHeaders } from './oauth-net-request'
 import {
+  resolveDesktopUserDataDir,
+  resolvePortableExecutableDir,
+  resolvePortableHermesHome,
+  seedPortableHermesHome
+} from './portable-runtime'
+import {
   buildSessionWindowUrl,
   chatWindowWebPreferences,
   createSessionWindowRegistry,
@@ -127,11 +133,15 @@ import { isPackagedInstallPath as isPackagedInstallPathUnderRoots } from './work
 import { readWslWindowsClipboardImage } from './wsl-clipboard-image'
 
 const USER_DATA_OVERRIDE = process.env.HERMES_DESKTOP_USER_DATA_DIR
+const PORTABLE_EXECUTABLE_DIR = resolvePortableExecutableDir({ isPackaged: app.isPackaged })
+const EARLY_USER_DATA_DIR = resolveDesktopUserDataDir({
+  override: USER_DATA_OVERRIDE,
+  portableExecutableDir: PORTABLE_EXECUTABLE_DIR
+})
 
-if (USER_DATA_OVERRIDE) {
-  const resolvedUserData = path.resolve(USER_DATA_OVERRIDE)
-  fs.mkdirSync(resolvedUserData, { recursive: true })
-  app.setPath('userData', resolvedUserData)
+if (EARLY_USER_DATA_DIR) {
+  fs.mkdirSync(EARLY_USER_DATA_DIR, { recursive: true })
+  app.setPath('userData', EARLY_USER_DATA_DIR)
 }
 
 const DEV_SERVER = process.env.HERMES_DESKTOP_DEV_SERVER
@@ -293,6 +303,11 @@ if (INSTALL_STAMP) {
 // HERMES_HOME beneath the throwaway userData dir so a fresh-install run never
 // touches the user's real ~/.hermes / %LOCALAPPDATA%\hermes.
 function resolveHermesHome() {
+  const portableHome = resolvePortableHermesHome(PORTABLE_EXECUTABLE_DIR)
+  if (portableHome) {
+    return portableHome
+  }
+
   if (process.env.HERMES_HOME) {
     return normalizeHermesHomeRoot(process.env.HERMES_HOME)
   }
@@ -332,6 +347,18 @@ function resolveHermesHome() {
 }
 
 const HERMES_HOME = resolveHermesHome()
+
+if (PORTABLE_EXECUTABLE_DIR) {
+  try {
+    const seeded = seedPortableHermesHome({ resourcesPath: process.resourcesPath, hermesHome: HERMES_HOME })
+    if (seeded.memoryDirectory) {
+      process.env.HERMES_MEMORY_DIR = seeded.memoryDirectory
+    }
+    console.log(`[vesper] portable data root: ${path.dirname(HERMES_HOME)}; seed=${JSON.stringify(seeded)}`)
+  } catch (error) {
+    console.warn(`[vesper] portable seed skipped: ${error instanceof Error ? error.message : String(error)}`)
+  }
+}
 
 function hermesManagedNodePathEntries() {
   // NOTE: keep this ordering in sync with iter_hermes_node_dirs() in
@@ -720,7 +747,9 @@ app.setName(APP_NAME)
 // need this, so gate it on Windows. (Fixes: desktop approval/turn notifications
 // never firing on Windows.)
 if (IS_WINDOWS) {
-  app.setAppUserModelId('io.github.heroineoy.vesper')
+  app.setAppUserModelId(
+    PORTABLE_EXECUTABLE_DIR ? 'io.github.heroineoy.vesper.portable' : 'io.github.heroineoy.vesper'
+  )
 }
 
 // Seed the native About panel with the live Hermes version. This is refreshed
@@ -8466,6 +8495,11 @@ ipcMain.handle('hermes:deep-link-ready', () => {
 })
 
 function registerDeepLinkProtocol() {
+  if (PORTABLE_EXECUTABLE_DIR) {
+    rememberLog('[portable] skipped hermes:// protocol registration')
+    return
+  }
+
   try {
     if (process.defaultApp && process.argv.length >= 2) {
       // Dev: register with the electron exec path + entry script so the OS can
