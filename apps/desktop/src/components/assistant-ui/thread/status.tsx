@@ -6,6 +6,7 @@ import { useElapsedSeconds } from '@/components/chat/activity-timer'
 import { ActivityTimerText } from '@/components/chat/activity-timer-text'
 import { Codicon } from '@/components/ui/codicon'
 import { Loader } from '@/components/ui/loader'
+import { FurinaThinkingCharm } from '@/components/furina-thinking-charm'
 import { useI18n } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { $backgroundResume } from '@/store/background-delegation'
@@ -67,7 +68,7 @@ export const ResponseLoadingIndicator: FC = () => {
       data-slot="aui_response-loading"
       label={compacting ? COMPACTION_LABEL : t.assistant.thread.loadingResponse}
     >
-      <span aria-hidden="true" className="dither inline-block size-3 rounded-[2px] text-midground/80 animate-pulse" />
+      <FurinaThinkingCharm className="size-3.5" />
       {compacting && <CompactionHint />}
       <ActivityTimerText seconds={elapsed} />
     </StatusRow>
@@ -112,7 +113,7 @@ const STREAM_STALL_S = 2
 // text flows, but if the stream then goes quiet mid-turn (tool think-time,
 // provider stall) nothing signals that work continues. Watch a per-flush
 // activity signal; when it hasn't changed for STREAM_STALL_S, re-show the
-// dither + a timer counting from the last activity.
+// stage familiar + a timer counting from the last activity.
 //
 // Subscribes to the activity signal ITSELF (rather than taking it as a prop)
 // so that per-token updates re-render only this leaf, not the whole
@@ -159,7 +160,7 @@ export const StreamStallIndicator: FC = () => {
       data-slot="aui_stream-stall"
       label={compacting ? COMPACTION_LABEL : 'Vesper is thinking'}
     >
-      <span aria-hidden="true" className="dither inline-block size-3 rounded-[2px] text-midground/80 animate-pulse" />
+      <FurinaThinkingCharm className="size-3.5" />
       {compacting && <CompactionHint />}
       <ActivityTimerText seconds={elapsed} />
     </StatusRow>

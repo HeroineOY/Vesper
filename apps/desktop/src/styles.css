@@ -523,6 +523,125 @@
   background: repeating-conic-gradient(currentColor 0% 25%, transparent 0% 50%) 0 0 / 0.125rem 0.125rem;
 }
 
+/* The Vesper horizon mark is shared by startup and static session navigation.
+   Active thinking uses the Furina water familiar below. */
+.vesper-orbit-breathe {
+  animation: vesper-orbit-breathe 1.8s ease-in-out infinite alternate;
+}
+
+.vesper-orbit-horizon-flow,
+.vesper-orbit-disk-flow {
+  filter: drop-shadow(0 0 5px #62ddff);
+  stroke: #f8feff;
+}
+
+.vesper-orbit-horizon-flow {
+  stroke-dasharray: 21 170;
+  animation: vesper-orbit-horizon-flow 2.25s linear infinite;
+}
+
+.vesper-orbit-disk-flow {
+  stroke-dasharray: 30 230;
+  animation: vesper-orbit-disk-flow 2.7s linear infinite;
+}
+
+@keyframes vesper-orbit-horizon-flow {
+  to {
+    stroke-dashoffset: 191;
+  }
+}
+
+@keyframes vesper-orbit-disk-flow {
+  to {
+    stroke-dashoffset: -260;
+  }
+}
+
+@keyframes vesper-orbit-breathe {
+  to {
+    filter: saturate(1.28) brightness(1.18);
+    opacity: 0.78;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vesper-orbit-breathe,
+  .vesper-orbit-horizon-flow,
+  .vesper-orbit-disk-flow {
+    animation: none;
+  }
+}
+
+.furina-thinking-charm {
+  filter: drop-shadow(0 0 0.25rem color-mix(in srgb, #68ddff 45%, transparent));
+}
+
+.furina-charm-familiar {
+  animation: furina-charm-bob 1.65s ease-in-out infinite alternate;
+  transform-origin: 16px 19px;
+}
+
+.furina-charm-ripple {
+  stroke-width: 0.8;
+  opacity: 0.38;
+  transform-origin: 15.5px 27px;
+  animation: furina-charm-ripple 1.65s ease-out infinite;
+}
+
+.furina-charm-waterlight {
+  stroke: #62e5ff;
+  stroke-width: 1.25;
+  stroke-dasharray: 8 50;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 0.2rem #48dfff);
+  animation: furina-charm-waterlight 1.25s linear infinite;
+}
+
+.furina-charm-sparkle {
+  transform-origin: 25px 9.5px;
+  animation: furina-charm-sparkle 1.1s ease-in-out infinite alternate;
+}
+
+@keyframes furina-charm-bob {
+  to {
+    transform: translateY(-1.35px) rotate(-2deg);
+  }
+}
+
+@keyframes furina-charm-ripple {
+  0% {
+    opacity: 0.42;
+    transform: scaleX(0.68);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scaleX(1.2);
+  }
+}
+
+@keyframes furina-charm-sparkle {
+  to {
+    opacity: 0.45;
+    transform: scale(0.7) rotate(20deg);
+  }
+}
+
+@keyframes furina-charm-waterlight {
+  to {
+    stroke-dashoffset: -58;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .furina-charm-familiar,
+  .furina-charm-ripple,
+  .furina-charm-waterlight,
+  .furina-charm-sparkle {
+    animation: none;
+  }
+}
+
 /* Hover-reveal suppression — the shared, declarative escape hatch.
    A collapsed pane slides in when the pointer dwells on its thin edge trigger.
    Controls that sit over that edge gutter would drag the panel in by accident.
@@ -1008,6 +1127,15 @@ text-* variant utilities. */ .btn-arc {
 
 [data-slot='aui_user-message-root'] {
   top: var(--sticky-human-top);
+  /* The sticky layer must still separate a parked prompt from scrolling text,
+     but a hard opaque band breaks the artwork behind the conversation. */
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--ui-chat-surface-background) 42%, transparent),
+    transparent 78%
+  );
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
 }
 
 [data-slot='aui_user-message-root'],

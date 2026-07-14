@@ -25,6 +25,132 @@ const PREVIEW_REPLAY_MS = 1100
 
 type Phase = 'live' | 'text-out' | 'overlay-out' | 'gone'
 
+function VesperBlackHoleLoader() {
+  return (
+    <svg
+      aria-label="Vesper black hole connecting"
+      className="size-[7.5rem] overflow-visible"
+      role="img"
+      viewBox="0 0 160 160"
+    >
+      <defs>
+        <linearGradient gradientUnits="userSpaceOnUse" id="vesper-black-hole-flow" x1="19" x2="141" y1="116" y2="39">
+          <stop stopColor="#7767ff" />
+          <stop offset=".27" stopColor="#54dcff" />
+          <stop offset=".5" stopColor="#ffffff" />
+          <stop offset=".72" stopColor="#a05fff" />
+          <stop offset="1" stopColor="#eb5b9b" />
+        </linearGradient>
+        <filter id="vesper-black-hole-glow">
+          <feGaussianBlur result="blur" stdDeviation="1.5" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      <g transform="rotate(-28 80 80)">
+        <ellipse
+          className="vbh-glow"
+          cx="80"
+          cy="80"
+          fill="none"
+          rx="57"
+          ry="19"
+          stroke="url(#vesper-black-hole-flow)"
+          strokeLinecap="round"
+          strokeWidth="8"
+        />
+        <ellipse
+          className="vbh-breathe"
+          cx="80"
+          cy="80"
+          fill="none"
+          filter="url(#vesper-black-hole-glow)"
+          rx="57"
+          ry="19"
+          stroke="url(#vesper-black-hole-flow)"
+          strokeLinecap="round"
+          strokeWidth="5.5"
+        />
+        <ellipse
+          className="vbh-disk-flow"
+          cx="80"
+          cy="80"
+          fill="none"
+          rx="57"
+          ry="19"
+          stroke="#f8feff"
+          strokeLinecap="round"
+          strokeWidth="3.4"
+        />
+      </g>
+
+      <circle cx="80" cy="80" fill="#000104" filter="drop-shadow(0 0 9px #000)" r="25" stroke="rgba(229,249,255,.12)" />
+
+      <circle
+        className="vbh-glow"
+        cx="80"
+        cy="80"
+        fill="none"
+        r="30"
+        stroke="url(#vesper-black-hole-flow)"
+        strokeLinecap="round"
+        strokeWidth="7"
+      />
+      <circle
+        cx="80"
+        cy="80"
+        fill="none"
+        filter="url(#vesper-black-hole-glow)"
+        r="30"
+        stroke="url(#vesper-black-hole-flow)"
+        strokeLinecap="round"
+        strokeWidth="4"
+      />
+      <circle
+        className="vbh-horizon-flow"
+        cx="80"
+        cy="80"
+        fill="none"
+        r="30"
+        stroke="#f8feff"
+        strokeLinecap="round"
+        strokeWidth="3"
+      />
+
+      <g transform="rotate(-28 80 80)">
+        <path
+          className="vbh-glow"
+          d="M23 80 C43 103 117 103 137 80"
+          fill="none"
+          stroke="url(#vesper-black-hole-flow)"
+          strokeLinecap="round"
+          strokeWidth="8"
+        />
+        <path
+          className="vbh-breathe"
+          d="M23 80 C43 103 117 103 137 80"
+          fill="none"
+          filter="url(#vesper-black-hole-glow)"
+          stroke="url(#vesper-black-hole-flow)"
+          strokeLinecap="round"
+          strokeWidth="5.5"
+        />
+        <path
+          d="M24 80 C44 102 116 102 136 80"
+          fill="none"
+          opacity=".27"
+          stroke="#f8feff"
+          strokeLinecap="round"
+          strokeWidth="1"
+        />
+      </g>
+    </svg>
+  )
+}
+
 // Dev affordance: a warm Cmd+R reconnects almost instantly, so the overlay
 // only flashes. Load with `?connecting=1` to force a looping preview.
 function forcedPreview(): boolean {
@@ -165,25 +291,49 @@ export function GatewayConnectingOverlay() {
   return (
     <div
       className={cn(
-        'fixed inset-0 z-[1200] grid place-items-center bg-(--ui-chat-surface-background) transition-opacity duration-500 ease-out',
+        'fixed inset-0 grid place-items-center bg-(--ui-chat-surface-background) transition-opacity duration-500 ease-out',
+        previewing ? 'z-[1500]' : 'z-[1200]',
         overlayHidden ? 'pointer-events-none opacity-0' : 'opacity-100'
       )}
     >
-      <style>{'@keyframes gco-cursor { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }'}</style>
-      <span
+      <style>{`
+        @keyframes gco-cursor { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }
+        @keyframes vbh-horizon-flow { to { stroke-dashoffset: 191; } }
+        @keyframes vbh-disk-flow { to { stroke-dashoffset: -260; } }
+        @keyframes vbh-breathe { to { opacity: .78; filter: saturate(1.28) brightness(1.18); } }
+        .vbh-glow { opacity: .34; filter: blur(4px); }
+        .vbh-horizon-flow {
+          stroke-dasharray: 21 170;
+          filter: drop-shadow(0 0 5px #62ddff);
+          animation: vbh-horizon-flow 2.25s linear infinite;
+        }
+        .vbh-disk-flow {
+          stroke-dasharray: 30 230;
+          filter: drop-shadow(0 0 5px #62ddff);
+          animation: vbh-disk-flow 2.7s linear infinite;
+        }
+        .vbh-breathe { animation: vbh-breathe 1.8s ease-in-out infinite alternate; }
+        @media (prefers-reduced-motion: reduce) {
+          .vbh-horizon-flow, .vbh-disk-flow, .vbh-breathe { animation: none !important; }
+        }
+      `}</style>
+      <div
         className={cn(
-          'inline-flex items-center pl-[0.4em] font-mono text-[0.64rem] font-semibold uppercase tracking-[0.4em] tabular-nums text-(--theme-primary) transition duration-300 ease-out',
+          'grid justify-items-center gap-7 transition duration-300 ease-out',
           leaving ? 'translate-y-2 opacity-0 saturate-0' : 'translate-y-0 opacity-100 saturate-100'
         )}
       >
-        {PREFIX}
-        {tail}
-        <span
-          aria-hidden="true"
-          className="dither ml-0.5 inline-block size-2 shrink-0 -translate-y-px rounded-[1px]"
-          style={{ animation: 'gco-cursor 1s step-end infinite' }}
-        />
-      </span>
+        <VesperBlackHoleLoader />
+        <span className="inline-flex items-center pl-[0.4em] font-mono text-[0.64rem] font-semibold uppercase tracking-[0.4em] tabular-nums text-(--theme-primary)">
+          {PREFIX}
+          {tail}
+          <span
+            aria-hidden="true"
+            className="dither ml-0.5 inline-block size-2 shrink-0 -translate-y-px rounded-[1px]"
+            style={{ animation: 'gco-cursor 1s step-end infinite' }}
+          />
+        </span>
+      </div>
     </div>
   )
 }

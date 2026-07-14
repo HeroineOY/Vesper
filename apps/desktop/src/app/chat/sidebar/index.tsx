@@ -1290,6 +1290,7 @@ export function ChatSidebar({
                   )
                 }
                 label={sessionsLabel}
+                labelMarker={agentsGrouped ? 'rail' : 'orbit'}
                 labelMeta={
                   worktreeGroupingActive ? (
                     reposScanning && !projectsSkeletonVisible ? (

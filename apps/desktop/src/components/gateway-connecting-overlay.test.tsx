@@ -59,6 +59,20 @@ const isRecoveryShown = () =>
   Boolean(screen.queryByText(/use local gateway/i) || screen.queryByText(/retry/i) || screen.queryByText(/sign in/i))
 
 describe('connecting overlay vs recovery surface', () => {
+  it('shows the Vesper black hole mark during initial boot', () => {
+    $desktopBoot.set({
+      ...$desktopBoot.get(),
+      progress: 20,
+      running: true,
+      visible: true
+    })
+
+    render(<GatewayConnectingOverlay />)
+
+    expect(isConnectingShown()).toBe(true)
+    expect(screen.getByRole('img', { name: /vesper black hole connecting/i })).toBeTruthy()
+  })
+
   it('hard initial-boot failure surfaces the recovery overlay (the working path)', () => {
     // failDesktopBoot() ran: error set, gateway never opened.
     $desktopBoot.set({

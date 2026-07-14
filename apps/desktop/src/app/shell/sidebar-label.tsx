@@ -1,12 +1,13 @@
 import type * as React from 'react'
 
+import { VesperOrbitIndicator } from '@/components/vesper-orbit-indicator'
 import { cn } from '@/lib/utils'
 
 interface SidebarPanelLabelProps extends React.ComponentProps<'span'> {
-  dotClassName?: string
+  marker?: 'orbit' | 'rail'
 }
 
-export function SidebarPanelLabel({ children, className, dotClassName, ...props }: SidebarPanelLabelProps) {
+export function SidebarPanelLabel({ children, className, marker = 'rail', ...props }: SidebarPanelLabelProps) {
   return (
     <span
       className={cn(
@@ -15,7 +16,14 @@ export function SidebarPanelLabel({ children, className, dotClassName, ...props 
       )}
       {...props}
     >
-      <span aria-hidden="true" className={cn('dither inline-block size-2 shrink-0 rounded-[1px]', dotClassName)} />
+      {marker === 'orbit' ? (
+        <VesperOrbitIndicator className="size-3.5 shrink-0" />
+      ) : (
+        <span
+          aria-hidden="true"
+          className="h-3 w-px shrink-0 rounded-full bg-linear-to-b from-(--ui-cyan) via-(--theme-primary) to-(--ui-purple) opacity-90 shadow-[0_0_0.375rem_color-mix(in_srgb,var(--ui-cyan)_35%,transparent)]"
+        />
+      )}
       <span className="min-w-0 truncate leading-none">{children}</span>
     </span>
   )

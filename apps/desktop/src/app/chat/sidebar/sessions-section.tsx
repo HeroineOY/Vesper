@@ -29,6 +29,7 @@ export const VIRTUALIZE_THRESHOLD = 25
 
 interface SidebarSectionHeaderProps {
   label: string
+  labelMarker?: 'orbit' | 'rail'
   open: boolean
   onToggle: () => void
   action?: React.ReactNode
@@ -42,6 +43,7 @@ interface SidebarSectionHeaderProps {
 
 function SidebarSectionHeader({
   label,
+  labelMarker,
   open,
   onToggle,
   action,
@@ -52,7 +54,7 @@ function SidebarSectionHeader({
   const labelBody = (
     <>
       {icon}
-      <SidebarPanelLabel>{label}</SidebarPanelLabel>
+      <SidebarPanelLabel marker={labelMarker}>{label}</SidebarPanelLabel>
       {meta && <SidebarCount>{meta}</SidebarCount>}
     </>
   )
@@ -123,6 +125,7 @@ interface SidebarSessionsSectionProps {
   removedSessionIds?: ReadonlySet<string>
   activeProjectId?: null | string
   labelMeta?: React.ReactNode
+  labelMarker?: 'orbit' | 'rail'
   labelIcon?: React.ReactNode
   // When false the section header is static (no caret/toggle) and always open.
   collapsible?: boolean
@@ -168,6 +171,7 @@ export function SidebarSessionsSection({
   removedSessionIds,
   activeProjectId,
   labelMeta,
+  labelMarker,
   labelIcon,
   collapsible = true,
   sortable = false,
@@ -345,6 +349,7 @@ export function SidebarSessionsSection({
         collapsible={collapsible}
         icon={labelIcon}
         label={label}
+        labelMarker={labelMarker}
         meta={labelMeta}
         onToggle={onToggle}
         open={sectionOpen}

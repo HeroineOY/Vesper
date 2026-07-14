@@ -152,6 +152,8 @@ docs/superpowers/*
 /workspace/gateway.lock
 /workspace/gateway.pid
 /workspace/gateway_state.json
+/workspace/processes.json
+/workspace/memories/
 # 运行时杂项快照
 /workspace/.skills_prompt_snapshot.json
 /workspace/.hermes_history
